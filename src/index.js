@@ -28,6 +28,15 @@ const YouTube = require('youtube-node');
 var youTube = new YouTube();
 youTube.setKey(Keys.youtube.API_key);
 
+var ANSWER_COUNT = 4; // The number of possible answers per trivia question.
+var GAME_LENGTH = 5;  // The number of questions per trivia game.
+var GAME_STATES = {
+    TRIVIA: "_TRIVIAMODE", // Asking trivia questions.
+    START: "_STARTMODE", // Entry point, start the game.
+    HELP: "_HELPMODE" // The user is asking for help.
+};
+var questions = require("./questions");
+
 exports.handler = function(event, context, callback) {
     let alexa = Alexa.handler(event, context);
     alexa.APP_ID = APP_ID;
@@ -66,7 +75,30 @@ var languageStrings = {
             "SHOW_VIDEO": "Yes, showing a video of %s.",
             "SHOW_VIDEO_ERR": "Sorry, I didn't get that. You can give me commands like 'find a video of Snow White' or 'show me a video of Bill Gates'. What can I do for you?",
             "SHOW_VIDEO_CARD": "Play Video",
-            "ERROR_CARD": "Error"
+            "ERROR_CARD": "Error",
+            "QUESTIONS" : questions["QUESTIONS_EN_US"],
+            "GAME_NAME" : "Reindeer Trivia", // Be sure to change this for your skill.
+            "HELP_MESSAGE": "I will ask you %s multiple choice questions. Respond with the number of the answer. " +
+            "For example, say one, two, three, or four. To start a new game at any time, say, start game. ",
+            "REPEAT_QUESTION_MESSAGE": "To repeat the last question, say, repeat. ",
+            "ASK_MESSAGE_START": "Would you like to start playing?",
+            "HELP_REPROMPT": "To give an answer to a question, respond with the number of the answer. ",
+            "STOP_MESSAGE": "Would you like to keep playing?",
+            "CANCEL_MESSAGE": "Ok, let\'s play again soon.",
+            "NO_MESSAGE": "Ok, we\'ll play another time. Goodbye!",
+            "TRIVIA_UNHANDLED": "Try saying a number between 1 and %s",
+            "HELP_UNHANDLED": "Say yes to continue, or no to end the game.",
+            "START_UNHANDLED": "Say start to start a new game.",
+            "NEW_GAME_MESSAGE": "Welcome to %s. ",
+            "WELCOME_MESSAGE": "I will ask you %s questions, try to get as many right as you can. " +
+            "Just say the number of the answer. Let\'s begin. ",
+            "ANSWER_CORRECT_MESSAGE": "correct. ",
+            "ANSWER_WRONG_MESSAGE": "wrong. ",
+            "CORRECT_ANSWER_MESSAGE": "The correct answer is %s: %s. ",
+            "ANSWER_IS_MESSAGE": "That answer is ",
+            "TELL_QUESTION_MESSAGE": "Question %s. %s ",
+            "GAME_OVER_MESSAGE": "You got %s out of %s questions correct. Thank you for playing!",
+            "SCORE_IS_MESSAGE": "Your score is %s. "
         }
     },
     "en-GB": {
@@ -97,7 +129,30 @@ var languageStrings = {
             "SHOW_VIDEO": "Yes, showing a video of %s.",
             "SHOW_VIDEO_ERR": "Sorry, I didn't get that. You can give me commands like 'find a video of Snow White' or 'show me a video of Bill Gates'. What can I do for you?",
             "SHOW_VIDEO_CARD": "Play Video",
-            "ERROR_CARD": "Error"
+            "ERROR_CARD": "Error",
+            "QUESTIONS" : questions["QUESTIONS_EN_US"],
+            "GAME_NAME" : "Reindeer Trivia", // Be sure to change this for your skill.
+            "HELP_MESSAGE": "I will ask you %s multiple choice questions. Respond with the number of the answer. " +
+            "For example, say one, two, three, or four. To start a new game at any time, say, start game. ",
+            "REPEAT_QUESTION_MESSAGE": "To repeat the last question, say, repeat. ",
+            "ASK_MESSAGE_START": "Would you like to start playing?",
+            "HELP_REPROMPT": "To give an answer to a question, respond with the number of the answer. ",
+            "STOP_MESSAGE": "Would you like to keep playing?",
+            "CANCEL_MESSAGE": "Ok, let\'s play again soon.",
+            "NO_MESSAGE": "Ok, we\'ll play another time. Goodbye!",
+            "TRIVIA_UNHANDLED": "Try saying a number between 1 and %s",
+            "HELP_UNHANDLED": "Say yes to continue, or no to end the game.",
+            "START_UNHANDLED": "Say start to start a new game.",
+            "NEW_GAME_MESSAGE": "Welcome to %s. ",
+            "WELCOME_MESSAGE": "I will ask you %s questions, try to get as many right as you can. " +
+            "Just say the number of the answer. Let\'s begin. ",
+            "ANSWER_CORRECT_MESSAGE": "correct. ",
+            "ANSWER_WRONG_MESSAGE": "wrong. ",
+            "CORRECT_ANSWER_MESSAGE": "The correct answer is %s: %s. ",
+            "ANSWER_IS_MESSAGE": "That answer is ",
+            "TELL_QUESTION_MESSAGE": "Question %s. %s ",
+            "GAME_OVER_MESSAGE": "You got %s out of %s questions correct. Thank you for playing!",
+            "SCORE_IS_MESSAGE": "Your score is %s. "
         }
     }
 };
@@ -165,6 +220,7 @@ var handlers = {
     },
     'TurnOnModuleIntent': function() {
         let moduleName = this.event.request.intent.slots.moduleName.value;
+        console.log("module name "+moduleName);
         if (moduleName) {
             let alexa = this
             let alexaEmit = function() {
@@ -187,12 +243,18 @@ var handlers = {
     },
     'TurnOffModuleIntent': function() {
         let moduleName = this.event.request.intent.slots.moduleName.value;
+        console.log("module name "+moduleName);
         if (moduleName) {
             let alexa = this
-            let alexaEmit = function() {
-                alexa.emit(':tellWithCard', alexa.t("TURN_OFF_MODULE", moduleName), alexa.t("TURN_OFF_MODULE_CARD"), alexa.t("TURN_OFF_MODULE", moduleName))
+            if(moduleName.contains("video") || moduleName.contains("images") || moduleName.contains("photos")){
+                let alexaEmit = function() {
+                    alexa.emit(':tellWithCard', alexa.t("TURN_OFF_MODULE", "the wall"), alexa.t("TURN_OFF_MODULE_CARD"), alexa.t("TURN_OFF_MODULE", "the wall"))
+                }
+            } else {
+                let alexaEmit = function() {
+                    alexa.emit(':tellWithCard', alexa.t("TURN_OFF_MODULE", moduleName), alexa.t("TURN_OFF_MODULE_CARD"), alexa.t("TURN_OFF_MODULE", moduleName))
+                }
             }
-
             // Send publish attempt to AWS IoT
             MirrorMirror.changeModule(moduleName, false, alexaEmit);
         } else {
@@ -234,5 +296,21 @@ var handlers = {
         } else {
             this.emit(':askWithCard', this.t("SHOW_VIDEO_ERR"), this.t("SHOW_VIDEO_ERR"), this.t("ERROR_CARD"), this.t("SHOW_VIDEO_ERR"))
         }
+    },
+    'showComponentIntent': function(){
+          var components = ["daisy biosensing board","headset","gold cup electrodes","conductive paste","leap motion vr kit","cpu + gpu","oculus rift","raspberry pi 3 model b starter kit","starter sensor kit","robotics starter kit","touch screen ","basic electronics kit","rfid kit","gps modules","gsm module","sensor kit","usb to ttl cable","fingerprint sensor","gps antenna","gps cable","camera","soldering iron","multimeter","solder wire","ipad pro wifi ","amazon echo","ubertooth","rubber ducky","proxmark3 kit","3d printer","3d printer spool"];
+          for(var i=0; i<components.length;i++){
+            com = com+components[i]+" ";
+          }
+          let alexa = this
+
+          // Alexa voice/card response to invoke after text is published to AWS IoT successfully
+          let alexaEmit = function() {
+              alexa.emit(':tellWithCard', alexa.t("SHOW_TEXT", com), alexa.t("SHOW_TEXT_CARD"), com)
+          }
+
+          // Send publish attempt to AWS IoT
+          MirrorMirror.displayText(com, alexaEmit);
+
     }
 };
