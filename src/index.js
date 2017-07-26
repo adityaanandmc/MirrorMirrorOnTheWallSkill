@@ -5,17 +5,17 @@
  * Examples:
  * One-shot model:
  *  User: "Alexa On The Wall, find Snow White."
- *  Alexa: "Yes my Queen, showing images of Snow White."
+ *  Alexa: "Yes , showing images of Snow White."
  */
 
 const Alexa = require('alexa-sdk');
 
 /**
  * App ID for the skill
- * 
- * replace with your app ID 
+ *
+ * replace with your app ID
  */
-const APP_ID = "amzn1.ask.skill.12001a25-5faa-4651-84dc-cd584a1c5ffa";
+const APP_ID = "amzn1.ask.skill.b728a918-d114-48f4-9294-33d3b40f7835";
 
 const MirrorMirror = require('./MirrorMirror');
 MirrorMirror.setup();
@@ -40,62 +40,62 @@ exports.handler = function(event, context, callback) {
 var languageStrings = {
     "en-US": {
         "translation": {
-            "WELCOME_MESSAGE": "Hello my Queen, what can I do for you? ",
-            "WELCOME_REPROMPT": "I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you, my Queen?",
+            "WELCOME_MESSAGE": "Hello , what can I do for you? ",
+            "WELCOME_REPROMPT": "I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you?",
             "WELCOME_CARD": "Hello",
-            "HELP_MESSAGE": "Hello my Queen, I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you, my Queen?",
+            "HELP_MESSAGE": "Hello , I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you?",
             "HELP_CARD": "Help",
-            "STOP_MESSAGE": "See you next time, my Queen!",
+            "STOP_MESSAGE": "See you next time!",
             "STOP_CARD": "Goodbye",
-            "SHOW_TEXT": "Yes, my Queen. %s.",
-            "SHOW_TEXT_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'display text of hello', or 'say you are the fairest of them all'. What can I do for you, my Queen?",
+            "SHOW_TEXT": "Yes. %s.",
+            "SHOW_TEXT_ERR": "Sorry, I didn't get that. You can give me commands like 'display text of hello', or 'say you are the fairest of them all'. What can I do for you?",
             "SHOW_TEXT_CARD": "Display Text",
-            "SHOW_IMAGE": "Yes, my Queen, showing images of %s.",
-            "SHOW_IMAGE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'find Snow White' or 'show me images of Bill Gates'. What can I do for you, my Queen?",
+            "SHOW_IMAGE": "Yes, showing images of %s.",
+            "SHOW_IMAGE_ERR": "Sorry, I didn't get that. You can give me commands like 'find Snow White' or 'show me images of Bill Gates'. What can I do for you?",
             "SHOW_IMAGE_CARD": "Show Image",
-            "TURN_ON_MODULE": "Yes, my Queen, opening module %s.",
-            "TURN_ON_MODULE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'open current weather' or 'turn on compliments'. What can I do for you, my Queen?",
+            "TURN_ON_MODULE": "Yes, opening module %s.",
+            "TURN_ON_MODULE_ERR": "Sorry, I didn't get that. You can give me commands like 'open current weather' or 'turn on compliments'. What can I do for you?",
             "TURN_ON_MODULE_CARD": "Open Module",
-            "TURN_ON_ALL_MODULES": "Yes, my Queen, opening all modules.",
+            "TURN_ON_ALL_MODULES": "Yes, opening all modules.",
             "TURN_ON_ALL_MODULES_CARD": "Open All Modules",
-            "TURN_OFF_MODULE": "Yes, my Queen, closing module %s.",
-            "TURN_OFF_MODULE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'close current weather' or 'turn off compliments'. What can I do for you, my Queen?",
+            "TURN_OFF_MODULE": "Yes, closing module %s.",
+            "TURN_OFF_MODULE_ERR": "Sorry, I didn't get that. You can give me commands like 'close current weather' or 'turn off compliments'. What can I do for you?",
             "TURN_OFF_MODULE_CARD": "Close Module",
-            "TURN_OFF_ALL_MODULES": "Yes, my Queen, closing all modules.",
+            "TURN_OFF_ALL_MODULES": "Yes, closing all modules.",
             "TURN_OFF_ALL_MODULES_CARD": "Close All Modules",
-            "SHOW_VIDEO": "Yes, my Queen, showing a video of %s.",
-            "SHOW_VIDEO_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'find a video of Snow White' or 'show me a video of Bill Gates'. What can I do for you, my Queen?",
+            "SHOW_VIDEO": "Yes, showing a video of %s.",
+            "SHOW_VIDEO_ERR": "Sorry, I didn't get that. You can give me commands like 'find a video of Snow White' or 'show me a video of Bill Gates'. What can I do for you?",
             "SHOW_VIDEO_CARD": "Play Video",
             "ERROR_CARD": "Error"
         }
     },
     "en-GB": {
         "translation": {
-            "WELCOME_MESSAGE": "Hello my Queen, what can I do for you? ",
-            "WELCOME_REPROMPT": "I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you, my Queen?",
+            "WELCOME_MESSAGE": "Hello , what can I do for you? ",
+            "WELCOME_REPROMPT": "I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you?",
             "WELCOME_CARD": "Hello",
-            "HELP_MESSAGE": "Hello my Queen, I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you, my Queen?",
+            "HELP_MESSAGE": "Hello , I can show you text and images, if you give me commands like 'say you are the fairest of them all' or 'find Snow White'. I can also open or close a magic mirror module, if you say commands like 'open compliments', or 'close weather forecast'. What can I do for you?",
             "HELP_CARD": "Help",
-            "STOP_MESSAGE": "See you next time, my Queen!",
+            "STOP_MESSAGE": "See you next time!",
             "STOP_CARD": "Goodbye",
-            "SHOW_TEXT": "Yes, my Queen. %s.",
-            "SHOW_TEXT_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'display text of hello', or 'say you are the fairest of them all'. What can I do for you, my Queen?",
+            "SHOW_TEXT": "Yes. %s.",
+            "SHOW_TEXT_ERR": "Sorry, I didn't get that. You can give me commands like 'display text of hello', or 'say you are the fairest of them all'. What can I do for you?",
             "SHOW_TEXT_CARD": "Display Text",
-            "SHOW_IMAGE": "Yes, my Queen, showing images of %s.",
-            "SHOW_IMAGE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'find Snow White' or 'show me images of Bill Gates'. What can I do for you, my Queen?",
+            "SHOW_IMAGE": "Yes, showing images of %s.",
+            "SHOW_IMAGE_ERR": "Sorry, I didn't get that. You can give me commands like 'find Snow White' or 'show me images of Bill Gates'. What can I do for you?",
             "SHOW_IMAGE_CARD": "Show Image",
-            "TURN_ON_MODULE": "Yes, my Queen, opening module %s.",
-            "TURN_ON_MODULE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'open current weather' or 'turn on compliments'. What can I do for you, my Queen?",
+            "TURN_ON_MODULE": "Yes, opening module %s.",
+            "TURN_ON_MODULE_ERR": "Sorry, I didn't get that. You can give me commands like 'open current weather' or 'turn on compliments'. What can I do for you?",
             "TURN_ON_MODULE_CARD": "Open Module",
-            "TURN_ON_ALL_MODULES": "Yes, my Queen, opening all modules.",
+            "TURN_ON_ALL_MODULES": "Yes, opening all modules.",
             "TURN_ON_ALL_MODULES_CARD": "Open All Modules",
-            "TURN_OFF_MODULE": "Yes, my Queen, closing module %s.",
-            "TURN_OFF_MODULE_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'close current weather' or 'turn off compliments'. What can I do for you, my Queen?",
+            "TURN_OFF_MODULE": "Yes, closing module %s.",
+            "TURN_OFF_MODULE_ERR": "Sorry, I didn't get that. You can give me commands like 'close current weather' or 'turn off compliments'. What can I do for you?",
             "TURN_OFF_MODULE_CARD": "Close Module",
-            "TURN_OFF_ALL_MODULES": "Yes, my Queen, closing all modules.",
+            "TURN_OFF_ALL_MODULES": "Yes, closing all modules.",
             "TURN_OFF_ALL_MODULES_CARD": "Close All Modules",
-            "SHOW_VIDEO": "Yes, my Queen, showing a video of %s.",
-            "SHOW_VIDEO_ERR": "Sorry, my Queen, I didn't get that. You can give me commands like 'find a video of Snow White' or 'show me a video of Bill Gates'. What can I do for you, my Queen?",
+            "SHOW_VIDEO": "Yes, showing a video of %s.",
+            "SHOW_VIDEO_ERR": "Sorry, I didn't get that. You can give me commands like 'find a video of Snow White' or 'show me a video of Bill Gates'. What can I do for you?",
             "SHOW_VIDEO_CARD": "Play Video",
             "ERROR_CARD": "Error"
         }

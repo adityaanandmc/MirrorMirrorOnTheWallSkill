@@ -14,6 +14,7 @@ app.setup = function() {
     caPath: __dirname + "/certs/root-CA.crt",
     clientId: "MirrorMirror" + (new Date().getTime()),
     region: "us-east-1",
+    host: "a3q3aq7hc47zxe.iot.us-east-1.amazonaws.com",
   });
 
   app.device.on('connect', function() {
