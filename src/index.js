@@ -111,68 +111,30 @@ var languageStrings = {
     }
 };
 
-var components = ["daisy biosensing board",
-                  "headset",
-                  "gold cup electrodes",
-                  "conductive paste",
-                  "leap motion vr kit",
+var components = [
                   "cpu + gpu",
-                  "oculus rift",
-                  "raspberry pi 3 model b starter kit",
-                  "starter sensor kit",
-                  "robotics starter kit",
-                  "touch screen ",
-                  "basic electronics kit",
-                  "rfid kit",
-                  "gps modules",
-                  "gsm module",
-                  "sensor kit",
-                  "usb to ttl cable",
-                  "fingerprint sensor",
-                  "gps antenna",
-                  "gps cable",
-                  "camera",
-                  "soldering iron",
-                  "multimeter",
-                  "solder wire",
-                  "ipad pro wifi ",
-                  "amazon echo",
-                  "ubertooth",
-                  "rubber ducky",
-                  "proxmark3 kit",
-                  "3d printer",
-                  "3d printer spool"];
+                  "raspberry pi",
+                  "AlphaBot kit",
+                  " IoT kit",
+                  "Amazon Echo",
+                  "AIY kit",
+                  "Leap motion Controller",
+                  "3D Printer",
+                  "Proxmark 3 Kit",
+                  "HackRF One",
+                  "Ubertooth One"];
 
-var description = ["This an be used to sample up to 16 channels of brain activity (EEG), muscle activity (EMG), and heart activity (ECG)."
-                    ,"its a simple headset"
-                    ,"for ECG"
-                    ,"for pasting"
-                    ,"VR motion sensing"
-                    "oculus rift",
-                    "raspberry pi 3 model b starter kit",
-                    "starter sensor kit",
-                    "robotics starter kit",
-                    "touch screen ",
-                    "basic electronics kit",
-                    "rfid kit",
-                    "gps modules",
-                    "gsm module",
-                    "sensor kit",
-                    "usb to ttl cable",
-                    "fingerprint sensor",
-                    "gps antenna",
-                    "gps cable",
-                    "camera",
-                    "soldering iron",
-                    "multimeter",
-                    "solder wire",
-                    "ipad pro wifi ",
-                    "amazon echo",
-                    "ubertooth",
-                    "rubber ducky",
-                    "proxmark3 kit",
-                    "3d printer",
-                    "3d printer spool"]
+var description = [" This new computing model uses massively parallel graphics processors to accelerate applications also parallel in nature.Machine learning algorithms have lots of simple operations that don’t depend on one another. Multiple cores within a GPU can handle simple operations in parallel leading to rapid data processing"
+                    ,"A credit-card sized computer that plugs into a computer monitor or TV, and uses a standard keyboard and mouse. A capable little device, it enables people of all ages to explore computing, and to learn how to program in languages like Scratch and Python."
+                    ,"An amazing starter kit for robotic development, the AlphaBot robotic platform facilitates activities like line tracking, obstacle avoidance,  speed measuring, IR remote control, video monitoring via network, etc. What's more? Thanks to the rich Raspberry Pi open source resources, and the modular design of AlphaBot, you'll learn how to extend and refit, and finally build your own Raspberry Pi robot."
+                    ,"The Internet of Things (IOT) devices are everyday items with added sensors, motors, and other electronics, which are connected to online services to analyse the data they collect. A way to prove or enhance your ideas or turn them into products. The kit provides all the hardware and software you need to speed up prototyping and time to production - The developer kit is optimized for rapid prototyping"
+                    ,"Alexa—the brain behind Echo enables making calls and messaging. Built on the cloud, the Echo adapts to your speech patterns, vocabulary, and preferences."
+                    "This project demonstrates how to get a natural language recognizer up and running and connect it to the Google Assistant, using your AIY Projects voice kit. Along with everything the Google Assistant already does, you can add your own question and answer pairs. All in a handy little cardboard cube, powered by a Raspberry Pi.",
+                    "Reach into virtual reality with your bare hands. The Leap Motion Controller captures the movement of your hands and fingers so you can interact with your computer in a whole new way",
+                    "Enables creation of a physical object from a three-dimensional digital model, typically by laying down many thin layers of a material in succession",
+                    "The Proxmark targets NFC and RFID frequencies that is capable of both transmitting and receiving while meeting the timing requirements of most proximity protocols",
+                    "HackRF One, an open source platform which acts like a sound card of computer. The ability to process Digital Signals to Radio waveforms allowing integration of large-scale communication networks",
+                    "Simulate Bluetooth connection senarios with this device"];
 
 var handlers = {
     'LaunchRequest': function() {
@@ -317,10 +279,21 @@ var handlers = {
         }
     },
     'showComponentIntent': function(){
-          var components = ["daisy biosensing board","headset","gold cup electrodes","conductive paste","leap motion vr kit","cpu + gpu","oculus rift","raspberry pi 3 model b starter kit","starter sensor kit","robotics starter kit","touch screen ","basic electronics kit","rfid kit","gps modules","gsm module","sensor kit","usb to ttl cable","fingerprint sensor","gps antenna","gps cable","camera","soldering iron","multimeter","solder wire","ipad pro wifi ","amazon echo","ubertooth","rubber ducky","proxmark3 kit","3d printer","3d printer spool"];
+          var components =  [
+                            "cpu + gpu",
+                            "raspberry pi",
+                            "AlphaBot kit",
+                            " IoT kit",
+                            "Amazon Echo",
+                            "AIY kit",
+                            "Leap motion Controller",
+                            "3D Printer",
+                            "Proxmark 3 Kit",
+                            "HackRF One",
+                            "Ubertooth One"];
           var com = "";
           for(var i=0; i<components.length;i++){
-            com = com+components[i]+" ";
+            com = com+components[i]+"\n";
           }
           let alexa = this
 
@@ -335,10 +308,18 @@ var handlers = {
     },
     'GetComponentInfo': function() {
         var component = this.event.request.intent.slots.comp;
+        var desc="";
         if(components.indexOf(component.value.toLowerCase())>-1){
-          this.emit(':tell',"I am telling about "+component.value.toLowerCase());
-      } else {
-          this.emit(':tell',"Ohh sorry we don't have that product here");
-      }
+          desc = "Okay "+description[components.indexOf(component.value.toLowerCase())];
+        } else {
+            desc = "Ohh sorry we don't have that product here";
+        }
+        let alexa = this
+
+        let alexaEmit = function() {
+          alexa.emit(':tellWithCard', alexa.t("SHOW_TEXT", desc), alexa.t("SHOW_TEXT_CARD"), desc)
+        }
+
+        MirrorMirror.displayText(desc,alexaEmit);
     }
 };
