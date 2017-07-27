@@ -157,6 +157,69 @@ var languageStrings = {
     }
 };
 
+var components = ["daisy biosensing board",
+                  "headset",
+                  "gold cup electrodes",
+                  "conductive paste",
+                  "leap motion vr kit",
+                  "cpu + gpu",
+                  "oculus rift",
+                  "raspberry pi 3 model b starter kit",
+                  "starter sensor kit",
+                  "robotics starter kit",
+                  "touch screen ",
+                  "basic electronics kit",
+                  "rfid kit",
+                  "gps modules",
+                  "gsm module",
+                  "sensor kit",
+                  "usb to ttl cable",
+                  "fingerprint sensor",
+                  "gps antenna",
+                  "gps cable",
+                  "camera",
+                  "soldering iron",
+                  "multimeter",
+                  "solder wire",
+                  "ipad pro wifi ",
+                  "amazon echo",
+                  "ubertooth",
+                  "rubber ducky",
+                  "proxmark3 kit",
+                  "3d printer",
+                  "3d printer spool"];
+
+var description = ["This an be used to sample up to 16 channels of brain activity (EEG), muscle activity (EMG), and heart activity (ECG)."
+                    ,"its a simple headset"
+                    ,"for ECG"
+                    ,"for pasting"
+                    ,"VR motion sensing"
+                    "oculus rift",
+                    "raspberry pi 3 model b starter kit",
+                    "starter sensor kit",
+                    "robotics starter kit",
+                    "touch screen ",
+                    "basic electronics kit",
+                    "rfid kit",
+                    "gps modules",
+                    "gsm module",
+                    "sensor kit",
+                    "usb to ttl cable",
+                    "fingerprint sensor",
+                    "gps antenna",
+                    "gps cable",
+                    "camera",
+                    "soldering iron",
+                    "multimeter",
+                    "solder wire",
+                    "ipad pro wifi ",
+                    "amazon echo",
+                    "ubertooth",
+                    "rubber ducky",
+                    "proxmark3 kit",
+                    "3d printer",
+                    "3d printer spool"]
+
 var handlers = {
     'LaunchRequest': function() {
         this.emit('SayHello');
@@ -312,5 +375,13 @@ var handlers = {
           // Send publish attempt to AWS IoT
           MirrorMirror.displayText(com, alexaEmit);
 
+    },
+    'GetComponentInfo': function() {
+        var component = this.event.request.intent.slots.comp;
+        if(components.indexOf(component.value.toLowerCase())>-1){
+          this.emit(':tell',"I am telling about "+component.value.toLowerCase());
+      } else {
+          this.emit(':tell',"Ohh sorry we don't have that product here");
+      }
     }
 };
