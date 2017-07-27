@@ -114,21 +114,21 @@ var languageStrings = {
 var components = [
                   "cpu + gpu",
                   "raspberry pi",
-                  "AlphaBot kit",
-                  " IoT kit",
-                  "Amazon Echo",
-                  "AIY kit",
-                  "Leap motion Controller",
-                  "3D Printer",
-                  "Proxmark 3 Kit",
-                  "HackRF One",
-                  "Ubertooth One"];
+                  "alphabot kit",
+                  "iot kit",
+                  "amazon echo",
+                  "aiy kit",
+                  "leap motion controller",
+                  "3d printer",
+                  "proxmark 3 kit",
+                  "hackrf on",
+                  "ubertooth on"];
 
 var description = [" This new computing model uses massively parallel graphics processors to accelerate applications also parallel in nature.Machine learning algorithms have lots of simple operations that don’t depend on one another. Multiple cores within a GPU can handle simple operations in parallel leading to rapid data processing"
                     ,"A credit-card sized computer that plugs into a computer monitor or TV, and uses a standard keyboard and mouse. A capable little device, it enables people of all ages to explore computing, and to learn how to program in languages like Scratch and Python."
                     ,"An amazing starter kit for robotic development, the AlphaBot robotic platform facilitates activities like line tracking, obstacle avoidance,  speed measuring, IR remote control, video monitoring via network, etc. What's more? Thanks to the rich Raspberry Pi open source resources, and the modular design of AlphaBot, you'll learn how to extend and refit, and finally build your own Raspberry Pi robot."
                     ,"The Internet of Things (IOT) devices are everyday items with added sensors, motors, and other electronics, which are connected to online services to analyse the data they collect. A way to prove or enhance your ideas or turn them into products. The kit provides all the hardware and software you need to speed up prototyping and time to production - The developer kit is optimized for rapid prototyping"
-                    ,"Alexa—the brain behind Echo enables making calls and messaging. Built on the cloud, the Echo adapts to your speech patterns, vocabulary, and preferences."
+                    ,"Alexa—the brain behind Echo enables making calls and messaging. Built on the cloud, the Echo adapts to your speech patterns, vocabulary, and preferences.",
                     "This project demonstrates how to get a natural language recognizer up and running and connect it to the Google Assistant, using your AIY Projects voice kit. Along with everything the Google Assistant already does, you can add your own question and answer pairs. All in a handy little cardboard cube, powered by a Raspberry Pi.",
                     "Reach into virtual reality with your bare hands. The Leap Motion Controller captures the movement of your hands and fingers so you can interact with your computer in a whole new way",
                     "Enables creation of a physical object from a three-dimensional digital model, typically by laying down many thin layers of a material in succession",
@@ -280,20 +280,20 @@ var handlers = {
     },
     'showComponentIntent': function(){
           var components =  [
-                            "cpu + gpu",
-                            "raspberry pi",
-                            "AlphaBot kit",
-                            " IoT kit",
-                            "Amazon Echo",
-                            "AIY kit",
-                            "Leap motion Controller",
-                            "3D Printer",
-                            "Proxmark 3 Kit",
-                            "HackRF One",
-                            "Ubertooth One"];
+                            "cpu + gpu ",
+                            "raspberry pi ",
+                            "AlphaBot kit ",
+                            " IoT kit ",
+                            "Amazon Echo ",
+                            "AIY kit ",
+                            "Leap motion Controller ",
+                            "3D Printer ",
+                            "Proxmark 3 Kit ",
+                            "HackRF One ",
+                            "Ubertooth One "];
           var com = "";
           for(var i=0; i<components.length;i++){
-            com = com+components[i]+"\n";
+            com = com+components[i]+" ";
           }
           let alexa = this
 
@@ -309,8 +309,9 @@ var handlers = {
     'GetComponentInfo': function() {
         var component = this.event.request.intent.slots.comp;
         var desc="";
+        console.log("--->", component);
         if(components.indexOf(component.value.toLowerCase())>-1){
-          desc = "Okay "+description[components.indexOf(component.value.toLowerCase())];
+          desc = description[components.indexOf(component.value.toLowerCase())];
         } else {
             desc = "Ohh sorry we don't have that product here";
         }
