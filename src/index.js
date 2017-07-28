@@ -46,6 +46,15 @@ exports.handler = function(event, context, callback) {
     alexa.execute();
 };
 
+const shutWall = function(alexa, _close) {
+  return new Promise((resolve) => {
+    let shutOff = function() {
+        _close.emit(':tellWithCard', _close.t("TURN_OFF_ALL_MODULES"), _close.t("TURN_OFF_ALL_MODULES_CARD"), _close.t("TURN_OFF_ALL_MODULES"))
+    }
+    resolve(alexa, MirrorMirror.changeModule('all_modules', false, shutOff));
+  });
+}
+
 var languageStrings = {
     "en-US": {
         "translation": {
@@ -70,8 +79,8 @@ var languageStrings = {
             "TURN_OFF_MODULE": "Yes, closing module %s.",
             "TURN_OFF_MODULE_ERR": "Sorry, I didn't get that. You can give me commands like 'close current weather' or 'turn off compliments'. What can I do for you?",
             "TURN_OFF_MODULE_CARD": "Close Module",
-            "TURN_OFF_ALL_MODULES": "Yes, closing all modules.",
-            "TURN_OFF_ALL_MODULES_CARD": "Close All Modules",
+            "TURN_OFF_ALL_MODULES": "Alright",
+            "TURN_OFF_ALL_MODULES_CARD": "Alright",
             "SHOW_VIDEO": "Yes, showing a video of %s.",
             "SHOW_VIDEO_ERR": "Sorry, I didn't get that. You can give me commands like 'find a video of Snow White' or 'show me a video of Bill Gates'. What can I do for you?",
             "SHOW_VIDEO_CARD": "Play Video",
@@ -110,6 +119,8 @@ var languageStrings = {
         }
     }
 };
+
+
 
 var components = [
                   "cpu + gpu",
@@ -178,7 +189,7 @@ var handlers = {
         let searchTerm = this.event.request.intent.slots.searchTerm.value;
         if (searchTerm) {
             let alexa = this
-
+            let _close = this
             // Search for images
             googleImages.search(searchTerm).then(function(images) {
                 // Only https urls are allowed for the Alexa cards
@@ -186,12 +197,14 @@ var handlers = {
                     smallImageUrl: images[0].thumbnail.url,
                     largeImageUrl: images[0].thumbnail.url
                 };
-                let alexaEmit = function() {
-                    alexa.emit(':tellWithCard', alexa.t("SHOW_IMAGE", searchTerm), alexa.t("SHOW_IMAGE_CARD"), searchTerm, imageObj)
-                }
 
+                shutWall(alexa, _close).then((alexa) => {
+                  let alexaEmit = function() {
+                    alexa.emit(':tellWithCard', alexa.t("SHOW_IMAGE", searchTerm), alexa.t("SHOW_IMAGE_CARD"), searchTerm, imageObj)
+                  };
+                  MirrorMirror.showImages(images, searchTerm, alexaEmit);
+                });
                 // Send publish attempt to AWS IoT
-                MirrorMirror.showImages(images, searchTerm, alexaEmit);
             })
         } else {
             this.emit(':askWithCard', this.t("SHOW_IMAGE_ERR"), this.t("SHOW_IMAGE_ERR"), this.t("ERROR_CARD"), this.t("SHOW_IMAGE_ERR"))
@@ -254,7 +267,7 @@ var handlers = {
         let searchTerm = this.event.request.intent.slots.searchTermVideo.value;
         if (searchTerm) {
             let alexa = this
-
+            let _close = this
             // search for Youtube video
             youTube.search(searchTerm, 1, function(error, result) {
                 if (error) {
@@ -266,12 +279,14 @@ var handlers = {
                         smallImageUrl: result.items[0].snippet.thumbnails.default.url,
                         largeImageUrl: result.items[0].snippet.thumbnails.high.url
                     };
-                    let alexaEmit = function() {
+                    shutWall(alexa, _close).then((alexa) => {
+                      let alexaEmit = function() {
                         alexa.emit(':tellWithCard', alexa.t("SHOW_VIDEO", searchTerm), alexa.t("SHOW_VIDEO_CARD"), searchTerm, imageObj)
-                    }
+                      }
+                      MirrorMirror.showVideo(result.items[0].id.videoId, searchTerm, alexaEmit);
+                    });
 
                     // Send publish attempt to AWS IoT
-                    MirrorMirror.showVideo(result.items[0].id.videoId, searchTerm, alexaEmit);
                 }
             });
         } else {
@@ -296,31 +311,33 @@ var handlers = {
             com = com+components[i]+" ";
           }
           let alexa = this
-
+          let _close = this
           // Alexa voice/card response to invoke after text is published to AWS IoT successfully
-          let alexaEmit = function() {
+          shutWall(alexa, _close).then((alexa) => {
+            let alexaEmit = function() {
               alexa.emit(':tellWithCard', alexa.t("SHOW_TEXT", com), alexa.t("SHOW_TEXT_CARD"), com)
-          }
+            }
+            MirrorMirror.displayText(com, alexaEmit);
+          });
 
           // Send publish attempt to AWS IoT
-          MirrorMirror.displayText(com, alexaEmit);
 
     },
     'GetComponentInfo': function() {
         var component = this.event.request.intent.slots.comp;
         var desc="";
-        console.log("--->", component);
         if(components.indexOf(component.value.toLowerCase())>-1){
           desc = description[components.indexOf(component.value.toLowerCase())];
         } else {
             desc = "Ohh sorry we don't have that product here";
         }
         let alexa = this
-
-        let alexaEmit = function() {
-          alexa.emit(':tellWithCard', alexa.t("SHOW_TEXT", desc), alexa.t("SHOW_TEXT_CARD"), desc)
-        }
-
-        MirrorMirror.displayText(desc,alexaEmit);
+        let _close = this
+        shutWall(alexa, _close).then((alexa) => {
+          let alexaEmit = function() {
+            alexa.emit(':tellWithCard', alexa.t("SHOW_TEXT", desc), alexa.t("SHOW_TEXT_CARD"), desc)
+          }
+          MirrorMirror.displayText(desc,alexaEmit);
+        });
     }
 };
